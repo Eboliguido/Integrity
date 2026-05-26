@@ -2,5 +2,5 @@
   "name": "Integrity Health Solutions",
   "description": "Liderando el cambio digital en salud a través de IA y medicina basada en evidencia. Creadores de StrokeGuard.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
