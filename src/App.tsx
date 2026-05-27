@@ -19,8 +19,6 @@ import {
   Menu,
   X,
   Target,
-  Volume2,
-  VolumeX,
   Linkedin,
   ExternalLink,
   Briefcase,
@@ -1394,9 +1392,17 @@ const PartnersSection = () => {
           {/* Tarjeta 3: Amazon Web Services */}
           <div className="bg-integrity-surface/20 border border-integrity-border p-8 rounded-sm hover:border-integrity-bright/40 transition-all group flex flex-col justify-between h-full">
             <div>
-              <div className="w-12 h-12 mb-6 flex items-center justify-center border border-integrity-border rounded-sm bg-integrity-surface group-hover:border-integrity-bright transition-colors">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 text-white group-hover:text-integrity-bright transition-colors" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75M12 9.75L14.25 12M12 9.75L9.75 12M3 13.5a6 6 0 1111.954-1.636l-.006.003L19.5 15H21" />
+              <div className="w-12 h-12 mb-6 flex items-center justify-center border border-integrity-border rounded-sm bg-integrity-surface group-hover:border-[#FF9900]/60 hover:bg-[#FF9900]/5 transition-colors duration-300 overflow-hidden">
+                <svg viewBox="0 0 120 70" className="w-10 h-10 text-white group-hover:text-white transition-all duration-300" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  {/* 'a' */}
+                  <path d="M 22.1 46 C 18.2 46 16.1 44.2 16.1 40.6 C 16.1 35.4 21.2 34 26.6 33.6 C 26.6 31.2 25.5 29.5 22.3 29.5 C 19.5 29.5 17.5 30.5 16 32 C 15.2 30.9 14.1 29.5 13.3 28.5 C 15.6 25.9 19.1 24.5 23.3 24.5 C 30 24.5 32.2 28.1 32.2 33.7 L 32.2 45.4 L 26.7 45.4 L 26.7 42.1 C 25.4 44.5 23.6 46 22.1 46 Z M 26.5 37.8 C 23.2 38.1 21.7 39.1 21.7 41.1 C 21.7 42.7 22.8 43.6 24.6 43.6 C 26 43.6 26.5 42.3 26.5 41.3 Z" />
+                  {/* 'w' */}
+                  <path d="M 36.3 25 L 42 25 L 45.7 39.2 L 49.3 25 L 54.3 25 L 57.9 39.2 L 61.6 25 L 67.2 25 L 60.1 45.5 L 54.9 45.5 L 51.3 31.4 L 47.7 45.5 L 42.5 45.5 Z" />
+                  {/* 's' */}
+                  <path d="M 76.5 46 C 71.1 46 68 43.2 68 39.4 C 68 35.1 71.9 33.8 76.4 33 C 79.5 32.5 81.1 31.8 81.1 30.2 C 81.1 28.9 79.7 28.1 77.2 28.1 C 74.5 28.1 72.5 29.1 71.3 30.5 L 68.3 27.6 C 70.3 25.4 73.8 24 77.4 24 C 83.2 24 86.8 26.8 86.8 30.9 C 86.8 35.7 82.2 36.5 78.1 37.3 C 75.3 37.8 73.6 38.4 73.6 39.9 C 73.6 41.2 75.1 42 77.4 42 C 80.5 42 82.7 40.8 84.1 39 L 87.1 42.1 C 85.1 44.5 81.3 46 76.5 46 Z" />
+                  {/* Signature Arrow (Amazon Smile) in signature orange (#FF9900) */}
+                  <path d="M 12 52.5 C 31 66 69 66 88 52.5 C 90 51.1 91.5 53 89.5 54.8 C 76.5 66.5 44 69.5 11 55 C 9 54.1 10.5 51.1 12 52.5 Z" fill="#FF9900" />
+                  <path d="M 91 50 C 90.1 52.5 86.5 57 84 58.5 C 83 59.1 83.3 60 84.8 59.5 C 90 57.8 95.2 55.4 97 52.5 C 98 50.9 96.5 49 93.5 48 C 91.8 47.4 90.8 47.7 91 50 Z" fill="#FF9900" />
                 </svg>
               </div>
               <h4 className="text-lg font-bold text-white tracking-tight mb-2">Amazon Web Services</h4>
@@ -1491,10 +1497,8 @@ const PulseLine = () => {
 
 export default function App() {
   const { scrollYProgress } = useScroll();
-  const [isMuted, setIsMuted] = useState(false);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [selectedFounder, setSelectedFounder] = useState<any>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -1502,66 +1506,18 @@ export default function App() {
     restDelta: 0.001
   });
 
-  useEffect(() => {
-    // Note: The audio file should be placed in the root or public folder as 'intro.wav'
-    const audio = new Audio('/intro.wav');
-    audio.volume = 0.5;
-    audioRef.current = audio;
-
-    const handleLoadError = (e: any) => {
-      console.error("Error loading audio file '/intro.wav'. Please ensure it is present in the public/root directory.", e);
-    };
-
-    audio.addEventListener('error', handleLoadError);
-
-    return () => {
-      audio.removeEventListener('error', handleLoadError);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  const handleStartAudio = () => {
-    // 1. Attempt to play audio
-    if (audioRef.current) {
-      if (!isMuted) {
-        audioRef.current.play().catch((err) => {
-          console.error("Playback failed:", err);
-        });
-      }
-    }
-
-    // 2. Navigate to the first content section
+  const handleScrollToStats = () => {
+    // Navigate to the first content section
     const statsSection = document.getElementById('stats');
     if (statsSection) {
       statsSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = isMuted;
-    }
-  }, [isMuted]);
-
   return (
     <div className="font-sans antialiased text-integrity-text bg-integrity-deep selection:bg-integrity-bright/20 min-h-screen relative border-none">
       <CustomCursor />
       
-      {/* Audio Control */}
-      <button 
-        onClick={() => setIsMuted(!isMuted)}
-        className="fixed bottom-8 left-8 z-[110] p-3 rounded-full bg-integrity-surface/80 border border-integrity-border text-integrity-bright hover:bg-integrity-bright hover:text-white transition-all duration-300 backdrop-blur-md group"
-        aria-label={isMuted ? "Unmute" : "Mute"}
-      >
-        {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        <span className="absolute left-14 py-1 px-2 bg-integrity-deep border border-integrity-border text-[9px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-          {isMuted ? "SYSTEM_AUDIO: OFF" : "SYSTEM_AUDIO: ON"}
-        </span>
-      </button>
-
       <PulseLine />
       <ParallaxNeuralArch />
       {/* Theme specific background elements */}
@@ -1572,7 +1528,7 @@ export default function App() {
         style={{ scaleX, transformOrigin: "0%" }}
       />
       <Navbar onDemoOpen={() => setIsDemoModalOpen(true)} />
-      <Hero onStart={handleStartAudio} />
+      <Hero onStart={handleScrollToStats} />
       <Stats />
       <Solutions />
       <StrokeGuardSection onDemoOpen={() => setIsDemoModalOpen(true)} />
